@@ -1,0 +1,199 @@
+warning: LF will be replaced by CRLF in .idea/misc.xml.
+The file will have its original line endings in your working directory.
+[1mdiff --git a/.idea/misc.xml b/.idea/misc.xml[m
+[1mindex 5d19981..3651b66 100644[m
+[1m--- a/.idea/misc.xml[m
+[1m+++ b/.idea/misc.xml[m
+[36m@@ -37,10 +37,13 @@[m
+     <ConfirmationsSetting value="0" id="Add" />[m
+     <ConfirmationsSetting value="0" id="Remove" />[m
+   </component>[m
+[31m-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">[m
+[32m+[m[32m  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">[m
+     <output url="file://$PROJECT_DIR$/build/classes" />[m
+   </component>[m
+   <component name="ProjectType">[m
+     <option name="id" value="Android" />[m
+   </component>[m
+[32m+[m[32m  <component name="SvnBranchConfigurationManager">[m
+[32m+[m[32m    <option name="mySupportsUserInfoFilter" value="true" />[m
+[32m+[m[32m  </component>[m
+ </project>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/build.gradle b/app/build.gradle[m
+[1mindex 71b20d6..f8a2151 100644[m
+[1m--- a/app/build.gradle[m
+[1m+++ b/app/build.gradle[m
+[36m@@ -11,10 +11,29 @@[m [mandroid {[m
+         versionName "1.0"[m
+         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"[m
+     }[m
+[32m+[m[32m    signingConfigs {[m
+[32m+[m[32m        config {[m
+[32m+[m[32m            storeFile file(KEY_PATH)[m
+[32m+[m[32m            storePassword KEY_PASS[m
+[32m+[m[32m            keyAlias ALAIAS_NAME[m
+[32m+[m[32m            keyPassword ALIAS_PASS[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    productFlavors {[m
+[32m+[m[32m        qihoo {[m
+[32m+[m[32m            applicationId "com.CoolWeather.android.qihoo"[m
+[32m+[m[32m        }[m
+[32m+[m[32m        baidu {[m
+[32m+[m[32m            applicationId "com.CoolWeather.android.baidu"[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+     buildTypes {[m
+         release {[m
+             minifyEnabled false[m
+             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'[m
+[32m+[m[32m            signingConfig signingConfigs.config[m
+         }[m
+     }[m
+ }[m
+[36m@@ -27,4 +46,13 @@[m [mdependencies {[m
+     compile 'com.android.support:appcompat-v7:25.3.1'[m
+     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'[m
+     testCompile 'junit:junit:4.12'[m
+[32m+[m[32m    compile 'com.squareup.okhttp3:okhttp:3.8.1'[m
+[32m+[m[32m    compile 'com.jakewharton:butterknife:8.6.0'[m
+[32m+[m[32m    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'[m
+[32m+[m[32m    compile 'com.google.code.gson:gson:2.8.0'[m
+[32m+[m[32m    compile 'com.github.bumptech.glide:glide:4.0.0-RC1'[m
+[32m+[m[32m    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'[m
+[32m+[m[32m    compile 'org.litepal.android:core:1.5.1'[m
+[32m+[m[32m    compile 'com.android.support:design:25.3.1'[m
+ }[m
+[41m+[m
+[1mdiff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml[m
+[1mindex 93bd516..b8887b4 100644[m
+[1m--- a/app/src/main/AndroidManifest.xml[m
+[1m+++ b/app/src/main/AndroidManifest.xml[m
+[36m@@ -2,9 +2,12 @@[m
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"[m
+     package="com.example.x552m.coolweather">[m
+ [m
+[32m+[m[32m    <uses-permission android:name="android.permission.INTERNET" />[m
+[32m+[m
+     <application[m
+[32m+[m[32m        android:name="org.litepal.LitePalApplication"[m
+         android:allowBackup="true"[m
+[31m-        android:icon="@mipmap/ic_launcher"[m
+[32m+[m[32m        android:icon="@drawable/wether"[m
+         android:label="@string/app_name"[m
+         android:roundIcon="@mipmap/ic_launcher_round"[m
+         android:supportsRtl="true"[m
+[36m@@ -16,6 +19,12 @@[m
+                 <category android:name="android.intent.category.LAUNCHER" />[m
+             </intent-filter>[m
+         </activity>[m
+[32m+[m[32m        <activity android:name=".WeatherActivity" />[m
+[32m+[m
+[32m+[m[32m        <service[m
+[32m+[m[32m            android:name=".service.AutoUpdateService"[m
+[32m+[m[32m            android:enabled="true"[m
+[32m+[m[32m            android:exported="true"></service>[m
+     </application>[m
+ [m
+ </manifest>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/src/main/java/com/example/x552m/coolweather/MainActivity.java b/app/src/main/java/com/example/x552m/coolweather/MainActivity.java[m
+[1mindex 7e98868..94aafb2 100644[m
+[1m--- a/app/src/main/java/com/example/x552m/coolweather/MainActivity.java[m
+[1m+++ b/app/src/main/java/com/example/x552m/coolweather/MainActivity.java[m
+[36m@@ -1,13 +1,24 @@[m
+ package com.example.x552m.coolweather;[m
+ [m
+[32m+[m[32mimport android.content.Intent;[m
+[32m+[m[32mimport android.content.SharedPreferences;[m
+[32m+[m[32mimport android.preference.PreferenceManager;[m
+ import android.support.v7.app.AppCompatActivity;[m
+ import android.os.Bundle;[m
+ [m
+ public class MainActivity extends AppCompatActivity {[m
+ [m
+[32m+[m
+[32m+[m
+     @Override[m
+     protected void onCreate(Bundle savedInstanceState) {[m
+         super.onCreate(savedInstanceState);[m
+         setContentView(R.layout.activity_main);[m
+[32m+[m[32m        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);[m
+[32m+[m[32m        if (prefs.getString("weather", null) != null) {[m
+[32m+[m[32m            Intent intent = new Intent(this, WeatherActivity.class);[m
+[32m+[m[32m            startActivity(intent);[m
+[32m+[m[32m          finish();[m
+[32m+[m[32m        }[m
+     }[m
+ }[m
+[1mdiff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml[m
+[1mindex 7c725d3..b26309f 100644[m
+[1m--- a/app/src/main/res/layout/activity_main.xml[m
+[1m+++ b/app/src/main/res/layout/activity_main.xml[m
+[36m@@ -1,18 +1,15 @@[m
+ <?xml version="1.0" encoding="utf-8"?>[m
+[31m-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"[m
+[32m+[m[32m<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"[m
+     xmlns:app="http://schemas.android.com/apk/res-auto"[m
+     xmlns:tools="http://schemas.android.com/tools"[m
+     android:layout_width="match_parent"[m
+     android:layout_height="match_parent"[m
+     tools:context="com.example.x552m.coolweather.MainActivity">[m
+ [m
+[31m-    <TextView[m
+[31m-        android:layout_width="wrap_content"[m
+[31m-        android:layout_height="wrap_content"[m
+[31m-        android:text="Hello World!"[m
+[31m-        app:layout_constraintBottom_toBottomOf="parent"[m
+[31m-        app:layout_constraintLeft_toLeftOf="parent"[m
+[31m-        app:layout_constraintRight_toRightOf="parent"[m
+[31m-        app:layout_constraintTop_toTopOf="parent" />[m
+[32m+[m[32m    <fragment[m
+[32m+[m[32m        android:layout_width="match_parent"[m
+[32m+[m[32m        android:layout_height="match_parent"[m
+[32m+[m[32m        android:id="@+id/chooser_area_fragment"[m
+[32m+[m[32m        android:name="com.example.x552m.coolweather.Fragment.ChooseAreaFragmenr"/>[m
+ [m
+[31m-</android.support.constraint.ConstraintLayout>[m
+[32m+[m[32m</FrameLayout>[m
+[1mdiff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml[m
+[1mindex b5ddc30..facc9c3 100644[m
+[1m--- a/app/src/main/res/values/strings.xml[m
+[1m+++ b/app/src/main/res/values/strings.xml[m
+[36m@@ -1,3 +1,3 @@[m
+ <resources>[m
+[31m-    <string name="app_name">CoolWeather</string>[m
+[32m+[m[32m    <string name="app_name">我的天气</string>[m
+ </resources>[m
+[1mdiff --git a/app/src/main/res/values/styles.xml b/app/src/main/res/values/styles.xml[m
+[1mindex 5885930..0eb88fe 100644[m
+[1m--- a/app/src/main/res/values/styles.xml[m
+[1m+++ b/app/src/main/res/values/styles.xml[m
+[36m@@ -1,7 +1,7 @@[m
+ <resources>[m
+ [m
+     <!-- Base application theme. -->[m
+[31m-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">[m
+[32m+[m[32m    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">[m
+         <!-- Customize your theme here. -->[m
+         <item name="colorPrimary">@color/colorPrimary</item>[m
+         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>[m
+[1mdiff --git a/gradle.properties b/gradle.properties[m
+[1mindex aac7c9b..83cd96c 100644[m
+[1m--- a/gradle.properties[m
+[1m+++ b/gradle.properties[m
+[36m@@ -10,6 +10,11 @@[m
+ # Specifies the JVM arguments used for the daemon process.[m
+ # The setting is particularly useful for tweaking memory settings.[m
+ org.gradle.jvmargs=-Xmx1536m[m
+[32m+[m[32mKEY_PATH=E:/jks/guolin.jks[m
+[32m+[m[32mKEY_PASS=123456[m
+[32m+[m[32mALAIAS_NAME=guolindev[m
+[32m+[m[32mALIAS_PASS=123456[m
+[32m+[m
+ [m
+ # When configured, Gradle will run in incubating parallel mode.[m
+ # This option should only be used with decoupled projects. More details, visit[m
